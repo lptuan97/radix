@@ -284,3 +284,25 @@ function activeMenuSidebar($module)
 
     return false;
 }
+
+//Get Link
+function getLinkAdmin($module, $action = '', $params = [])
+{
+    $url = _WEB_HOST_ROOT_ADMIN;
+    $url = $url . '?module=' . $module;
+
+    if (!empty($action)) {
+        $url = $url . '&action=' . $action;
+    }
+
+    /*
+     * params = ['id'=>1, 'keyword'=>'unicode']
+     * => paramsString = id=1&keyword=unicode
+     *
+     * */
+    if (!empty($params)) {
+        $paramsString = http_build_query($params);
+        $url = $url . '&' . $paramsString;
+    }
+    return $url;
+}
