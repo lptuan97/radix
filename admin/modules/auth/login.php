@@ -1,0 +1,127 @@
+<?php
+if (!defined('_INCODE')) die('Access Deined...');
+// Title
+$data = [
+    'pageTitle' => 'Đăng nhập hệ thống'
+];
+layout('header-login', 'admin', $data);
+
+/* CÁC BƯỚC TRONG FILE LOGIN.PHP
+1. Kiểm tra trạng thái đăng nhập
+    gọi hàm isLogin() True (Đã đăng nhập) -> admin/index || False -> ' ' 
+2. Xử lý đăng nhập
+    - lấy dữ liệu gửi lên
+    - Validate dữ liệu
+    - truy vấn dữ liệu từ email -> kiểm tra mật khẩu
+    - Tạo $_SESSION['login-token'] và lưu giá trị vào token trong database
+    - chuyển hướng admin/index
+*/
+
+
+
+//Kiểm tra trạng thái đăng nhập
+if (isLogin()) {
+    redirect('admin');
+}
+// Xử lý đăng nhập
+if (isPost()) {
+    $body = getBody();
+    if (!empty(trim($body['email'])) && !empty(trim($body['password']))) {
+        //Kiểm tra đăng nhập
+        $email = $body['email'];
+        $password = $body['password'];
+
+        //Truy vấn lấy thông tin user theo email
+        $userQuery = firstRaw("SELECT id, password FROM users WHERE email='$email' AND status=1");
+
+        // Kiểm tra kết quả truy vấn
+        if (!empty($userQuery)) {
+            $passwordHash = $userQuery['password'];
+            $user_id = $userQuery['id'];
+            $checkPass = ($passwordHash == $password) ? true : false;
+            $checkPass1 = password_verify($password, $passwordHash);
+            if ($checkPass) {
+                //Tạo token login
+                $tokenLogin = sha1(uniqid() . time());
+                //Insert dữ liệu vào bảng login_token
+                $dataToken = [
+                    'user_id' => $user_id,
+                    'token' => $tokenLogin,
+                    'create_at' => date('Y-m-d H:i:s')
+                ];
+                $insertTokenStatus = insert('login_token', $dataToken);
+                if ($insertTokenStatus) {
+                    //Insert token thành công
+
+                    //Lưu loginToken vào session
+                    setSession('loginToken', $tokenLogin);
+
+                    //Chuyển hướng qua trang quản lý users
+                    redirect('admin');
+                } else {
+                    setFlashData('msg', 'Lỗi hệ thống không thể lưu token, bạn không thể đăng nhập vào lúc này');
+                    setFlashData('msg_type', 'danger');
+                    // redirect('admin?module=auth&action=login');
+                }
+            } else {
+                // Mật khẩu không khớp nhau
+                setFlashData('msg', 'Mật khẩu không chính xác');
+                setFlashData('msg_type', 'danger');
+                // redirect('admin?module=auth&action=login');
+
+            }
+        } else {
+            // Truy vấn thất bại 
+            setFlashData('msg', 'Email không tồn tại trong hệ thống hoặc chưa được kích hoạt');
+            setFlashData('msg_type', 'danger');
+            // redirect('admin?module=auth&action=login');
+
+        }
+    } else {
+        // Rỗng
+        setFlashData('msg', 'Vui lòng nhập email và mật khẩu');
+        setFlashData('msg_type', 'danger');
+        // redirect('admin?module=auth&action=login');
+
+    }
+    redirect('admin?module=auth&action=login');
+}
+
+getFlashData('msg');
+getFlashData('msg_type');
+
+
+?>
+
+
+
+
+
+
+
+<div class="row">
+    <div class="col-6" style="margin: 20px auto;">
+        <h3 class="text-center text-uppercase">Đăng nhập hệ thống</h3>
+        <?php //getMsg($msg, $msgType); 
+        ?>
+        <form action="" method="post">
+            <div class="form-group">
+                <label for="">Email</label>
+                <input type="email" name="email" class="form-control" placeholder="Địa chỉ email...">
+            </div>
+
+            <div class="form-group">
+                <label for="">Mật khẩu</label>
+                <input type="password" name="password" class="form-control" placeholder="Mật khẩu...">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
+            <hr>
+            <p class="text-center"><a href="?module=auth&action=forgot">Quên mật khẩu</a></p>
+
+        </form>
+    </div>
+</div>
+
+
+<?php
+layout('footer-login', 'admin');
