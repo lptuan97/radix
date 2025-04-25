@@ -1,15 +1,16 @@
 <?php
 session_start();
+
 require_once '../config.php';
 
 echo "<div class ='container d-flex justify-content-center'>";
-echo "all-$_session: '";
+echo "all-session: '";
 print_r($_SESSION);
 echo '<br/>';
-echo "all-$_get: '";
+echo "all-get: '";
 print_r($_GET);
 echo '<br/>';
-echo "all-$_post: ";
+echo "all-post: ";
 print_r($_POST);
 echo '<br/>';
 echo "</div>";

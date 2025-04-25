@@ -38,9 +38,10 @@ if (isPost()) {
         if (!empty($userQuery)) {
             $passwordHash = $userQuery['password'];
             $user_id = $userQuery['id'];
-            $checkPass = ($passwordHash == $password) ? true : false;
-            $checkPass1 = password_verify($password, $passwordHash);
-            if ($checkPass) {
+            
+            // $checkPass = ($passwordHash == $password) ? true : false;
+            // $checkPass1 = password_verify($password, $passwordHash);
+            if (password_verify($password, $passwordHash)) {
                 //Tạo token login
                 $tokenLogin = sha1(uniqid() . time());
                 //Insert dữ liệu vào bảng login_token
@@ -87,8 +88,8 @@ if (isPost()) {
     redirect('admin?module=auth&action=login');
 }
 
-getFlashData('msg');
-getFlashData('msg_type');
+$msg = getFlashData('msg');
+$msgType = getFlashData('msg_type');
 
 
 ?>
@@ -102,7 +103,7 @@ getFlashData('msg_type');
 <div class="row">
     <div class="col-6" style="margin: 20px auto;">
         <h3 class="text-center text-uppercase">Đăng nhập hệ thống</h3>
-        <?php //getMsg($msg, $msgType); 
+        <?php getMsg($msg, $msgType); 
         ?>
         <form action="" method="post">
             <div class="form-group">

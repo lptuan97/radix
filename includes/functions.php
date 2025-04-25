@@ -240,7 +240,7 @@ function isLogin()
     return $checkLogin;
 }
 
-//Tự động xoá token login đếu đăng xuất
+//Tự động xoá token login nếu đăng xuất
 function autoRemoveTokenLogin()
 {
     $allUsers = getRaw("SELECT * FROM users WHERE status=1");
