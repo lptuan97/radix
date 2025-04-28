@@ -3,7 +3,7 @@ session_start();
 ob_start();
 require_once '../config.php';
 
-echo "<div class ='container d-flex flex-column align-center'>";
+echo "<div class ='container d-flex justify-content-end'>";
 
 echo "all-session: '";
 echo '<pre>';

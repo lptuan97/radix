@@ -79,45 +79,72 @@ function isGet()
 }
 
 //Lấy giá trị phương thức POST, GET 
-function getBody()
+//Lấy giá trị phương thức POST, GET
+function getBody($method = '')
 {
-    // Khai báo mảng rỗng lưu data
+
     $bodyArr = [];
 
-    if (isGet()) {
-        //Xử lý chuỗi trước khi hiển thị ra
-        //return $_GET;
-        /*
-         * Đọc key của mảng $_GET
-         *
-         * */
-        if (!empty($_GET)) {
-            foreach ($_GET as $key => $value) {
-                $key = strip_tags($key);
-                if (is_array($value)) {
-                    $bodyArr[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
-                } else {
-                    $bodyArr[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+    if (empty($method)) {
+        if (isGet()) {
+            //Xử lý chuỗi trước khi hiển thị ra
+            //return $_GET;
+            /*
+             * Đọc key của mảng $_GET
+             *
+             * */
+            if (!empty($_GET)) {
+                foreach ($_GET as $key => $value) {
+                    $key = strip_tags($key);
+                    if (is_array($value)) {
+                        $bodyArr[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
+                    } else {
+                        $bodyArr[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+                    }
+                }
+            }
+        }
+
+        if (isPost()) {
+            if (!empty($_POST)) {
+                foreach ($_POST as $key => $value) {
+                    $key = strip_tags($key);
+                    if (is_array($value)) {
+                        $bodyArr[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
+                    } else {
+                        $bodyArr[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+                    }
+                }
+            }
+        }
+    } else {
+        if ($method == 'get') {
+            if (!empty($_GET)) {
+                foreach ($_GET as $key => $value) {
+                    $key = strip_tags($key);
+                    if (is_array($value)) {
+                        $bodyArr[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
+                    } else {
+                        $bodyArr[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+                    }
+                }
+            }
+        } elseif ($method == 'post') {
+            if (!empty($_POST)) {
+                foreach ($_POST as $key => $value) {
+                    $key = strip_tags($key);
+                    if (is_array($value)) {
+                        $bodyArr[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
+                    } else {
+                        $bodyArr[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+                    }
                 }
             }
         }
     }
-
-    if (isPost()) {
-        if (!empty($_POST)) {
-            foreach ($_POST as $key => $value) {
-                $key = strip_tags($key);
-                if (is_array($value)) {
-                    $bodyArr[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
-                } else {
-                    $bodyArr[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
-                }
-            }
-        }
-    }
-
     return $bodyArr;
 }
+
 
 //Kiểm tra email
 function isEmail($email)
@@ -305,4 +332,18 @@ function getLinkAdmin($module, $action = '', $params = [])
         $url = $url . '&' . $paramsString;
     }
     return $url;
+}
+
+//Format Date
+function getDateFormat($strDate, $format)
+{
+    if (!empty($strDate)) {
+        $dateObject = date_create($strDate);
+        if (!empty($dateObject)) {
+            return date_format($dateObject, $format);
+        }
+    }else{
+        return '';
+    }
+    
 }
