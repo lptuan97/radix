@@ -4,6 +4,7 @@ if (!defined('_INCODE')) die('Access Deined...');
 function query($sql, $data=[], $statementStatus=false){
     global $conn;
     $query = false;
+    print_r($sql);
     try{
         $statement = $conn->prepare($sql);
 
@@ -15,7 +16,7 @@ function query($sql, $data=[], $statementStatus=false){
 
     }catch (Exception $exception){
 
-        require_once 'modules/errors/database.php'; //Import error
+        require_once '../modules/errors/database.php'; //Import error
         die(); //Dừng hết chương trình
     }
 
