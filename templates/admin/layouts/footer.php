@@ -49,5 +49,26 @@
 <script src="<?php echo _WEB_HOST_ADMIN_TEMPLATE; ?>/assets/js/pages/dashboard.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<?php echo _WEB_HOST_ADMIN_TEMPLATE; ?>/assets/js/demo.js"></script>
+<!-- ckeditor -->
+<script src="<?php echo _WEB_HOST_ADMIN_TEMPLATE; ?>/assets/ckeditor/ckeditor.js"></script>
+<!-- ckeditor -->
+<script src="<?php echo _WEB_HOST_ADMIN_TEMPLATE; ?>/assets/ckfinder/ckfinder.js"></script>
+
+
+<!-- slug -->
+<?php
+$body = getBody();
+$module = null;
+if (!empty($body['module'])) {
+    $module = $body['module'];
+}
+
+?>
+<script type="text/javascript">
+    let rootUrl = '<?php echo _WEB_HOST_ROOT; ?>';
+    let prefixUrl = '<?php echo getPrefixLinkService($module); ?>';
+</script>
+<script src="<?php echo _WEB_HOST_ADMIN_TEMPLATE; ?>/assets/js/custom.js?ver=<?php echo rand(); ?>"></script>
 </body>
+
 </html>

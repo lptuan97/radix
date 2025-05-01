@@ -4,7 +4,9 @@ if (!defined('_INCODE')) die('Access Deined...');
 function query($sql, $data=[], $statementStatus=false){
     global $conn;
     $query = false;
+    echo "<pre class='text-primary text-center'>";
     print_r($sql);
+    echo "</pre>";
     try{
         $statement = $conn->prepare($sql);
 
@@ -34,7 +36,7 @@ function insert($table, $dataInsert){
     $valueStr = ':'.implode(', :', $keyArr);
 
     $sql = 'INSERT INTO `'.$table.'`('.$fieldStr.') VALUES('.$valueStr.')';
-
+    print_r($sql);
     return query($sql, $dataInsert);
 }
 

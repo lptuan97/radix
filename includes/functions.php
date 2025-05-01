@@ -342,8 +342,70 @@ function getDateFormat($strDate, $format)
         if (!empty($dateObject)) {
             return date_format($dateObject, $format);
         }
-    }else{
+    } else {
         return '';
     }
-    
+}
+
+//Check font-awesome icon
+function isFontIcon($input)
+{
+
+    if (strpos($input, '<i class="') !== false) {
+        return true;
+    }
+
+    return false;
+}
+
+function getLinkQueryString($key, $value)
+{
+    $queryString = $_SERVER['QUERY_STRING'];
+
+    $queryArr = explode('&', $queryString);
+   
+    $queryArr = array_filter($queryArr);
+    // print_r1($queryArr);
+    $queryFinal = '';
+
+    $check = false;
+
+    if (!empty($queryArr)) {
+        foreach ($queryArr as $item) {
+            $itemArr = explode('=', $item);
+            if (!empty($itemArr)) {
+                if ($itemArr[0] == $key) {
+                    $itemArr[1] = $value;
+                    $check = true;
+                }
+
+                $item = implode('=', $itemArr);
+
+                $queryFinal .= $item . '&';
+            }
+        }
+    }
+
+    if (!$check) {
+        $queryFinal .= $key . '=' . $value;
+    }
+
+    if (!empty($queryFinal)) {
+        $queryFinal = rtrim($queryFinal, '&');
+    } else {
+        $queryFinal = $queryString;
+    }
+
+    return $queryFinal;
+}
+
+
+
+// PRINT_R + ECHO pre
+function print_r1($value, string $color = "danger")
+{
+    echo "<hr>";
+    echo "<pre class ='text-$color'>";
+    print_r($value);
+    echo "</pre>";
 }

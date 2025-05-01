@@ -14,7 +14,7 @@ if (!empty($body['id'])){
     $groupId = $body['id'];
 
     $groupDetail = firstRaw("SELECT * FROM `groups` WHERE id=$groupId");
-    print_r($groupDetail);  
+    // print_r($groupDetail);  
     if (empty($groupDetail)){
         //Không Tồn tại
         redirect('admin?module=groups');

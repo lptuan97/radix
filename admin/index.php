@@ -3,7 +3,7 @@ session_start();
 ob_start();
 require_once '../config.php';
 
-echo "<div class ='container d-flex justify-content-end'>";
+echo "<div class ='text-primary container d-flex justify-content-end'>";
 
 echo "all-session: '";
 echo '<pre>';
@@ -30,6 +30,8 @@ require_once '../includes/phpmailer/SMTP.php';
 require_once '../includes/phpmailer/Exception.php';
 
 require_once '../includes/functions.php';
+require_once '../includes/permalink.php';
+
 require_once '../includes/connect.php';
 require_once '../includes/database.php';
 require_once '../includes/session.php';
