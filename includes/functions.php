@@ -5,6 +5,13 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
+use function PHPSTORM_META\type;
+
+function linkTemplates($path = '')
+{
+    echo (_WEB_HOST_TEMPLATE . "/" . $path);
+}
+
 
 function layout($layoutName = 'header', $dir = '', $data = [])
 {
@@ -12,9 +19,10 @@ function layout($layoutName = 'header', $dir = '', $data = [])
     if (!empty($dir)) {
         $dir = '/' . $dir;
     }
+    $path = _WEB_PATH_TEMPLATE . $dir . '/layouts/' . $layoutName . '.php';
 
-    if (file_exists(_WEB_PATH_TEMPLATE . $dir . '/layouts/' . $layoutName . '.php')) {
-        require_once _WEB_PATH_TEMPLATE . $dir . '/layouts/' . $layoutName . '.php';
+    if (file_exists($path)) {
+        require_once $path;
     }
 }
 
@@ -222,9 +230,14 @@ function getMsg($msg, $type = 'success')
 }
 
 //Hàm chuyển hướng
-function redirect($path = 'index.php')
+function redirect($path = 'index.php', $fullUrl = false)
 {
-    $url = _WEB_HOST_ROOT . '/' . $path;
+    if (empty($fullUrl)) {
+        $url = _WEB_HOST_ROOT . '/' . $path;
+    } else {
+        $url = $path;
+    }
+
     header("Location: $url");
     exit;
 }
@@ -301,11 +314,18 @@ function getUserInfo($user_id)
     $info = firstRaw("SELECT * FROM users WHERE id=$user_id");
     return $info;
 }
+//Lấy thông tin user
+function getUserInfoGroupId($user_id)
+{
+    $info = firstRaw("SELECT * FROM users WHERE id=$user_id");
+    return $info;
+}
+
 
 //Action menu sidebar
 function activeMenuSidebar($module)
 {
-    if (getBody()['module'] == $module) {
+    if (!empty(getBody()['module']) && getBody()['module'] == $module) {
         return true;
     }
 
@@ -363,7 +383,7 @@ function getLinkQueryString($key, $value)
     $queryString = $_SERVER['QUERY_STRING'];
 
     $queryArr = explode('&', $queryString);
-   
+
     $queryArr = array_filter($queryArr);
     // print_r1($queryArr);
     $queryFinal = '';
@@ -402,10 +422,418 @@ function getLinkQueryString($key, $value)
 
 
 // PRINT_R + ECHO pre
+
+function print_var_name($var)
+{
+    foreach ($GLOBALS as $var_name => $value) {
+        if ($value === $var) {
+            return $var_name;
+        }
+    }
+
+    return false;
+}
 function print_r1($value, string $color = "danger")
 {
+    $nameVar = print_var_name($value);
+    $typeVar = gettype($value);
     echo "<hr>";
+    echo "___________________: $" . $nameVar . "  (" . $typeVar . ")";
     echo "<pre class ='text-$color'>";
+
+    // print($value);
     print_r($value);
     echo "</pre>";
+}
+
+// Xử lý lỗi 
+function setExceptionError($exception)
+{
+
+    if (_DEBUG) {
+
+        setFlashData('debug_error', [
+            'error_code' => $exception->getCode(),
+            'error_message' => $exception->getMessage(),
+            'error_file' => $exception->getFile(),
+            'error_line' => $exception->getLine()
+        ]);
+
+        $reload = getFlashData('reload');
+
+        if (!$reload) {
+
+            setFlashData('reload', 1);
+            if (isAdmin()) {
+                redirect(getPathAdmin());
+            } else {
+                redirect(getPath());
+            }
+        }
+
+        die();
+    } else {
+        //removeSession('reload');
+        //removeSession('debug_error');
+        require_once _WEB_PATH_ROOT . '/modules/errors/500.php';
+    }
+}
+
+function setErrorHandler($errno, $errstr, $errfile, $errline)
+{
+
+    if (!_DEBUG) {
+        require_once _WEB_PATH_ROOT . '/modules/errors/500.php';
+        //removeSession('reload');
+        //removeSession('debug_error');
+        return;
+    }
+
+    setFlashData('debug_error', [
+        'error_code' => $errno,
+        'error_message' => $errstr,
+        'error_file' => $errfile,
+        'error_line' => $errline
+    ]);
+
+    $reload = getFlashData('reload');
+
+    if (!$reload) {
+        setFlashData('reload', 1);
+        if (isAdmin()) {
+            redirect(getPathAdmin());
+        } else {
+            redirect(getPath());
+        }
+    } else {
+        //removeSession('reload');
+    }
+
+    die();
+
+    //throw new ErrorException($errstr, $errno, 1, $errfile, $errline);
+}
+
+function loadExceptionError()
+{
+
+    $debugError = getFlashData('debug_error');
+
+    if (!empty($debugError)) {
+
+        if (_DEBUG) {
+            require_once _WEB_PATH_ROOT . '/modules/errors/exception.php';
+        } else {
+            require_once _WEB_PATH_ROOT . '/modules/errors/500.php';
+        }
+    }
+}
+function getPathAdmin()
+{
+    $path = 'admin';
+    if (!empty($_SERVER['QUERY_STRING'])) {
+        $path .= '?' . trim($_SERVER['QUERY_STRING']);
+    }
+
+    return $path;
+}
+
+function getPath()
+{
+    $path = '';
+    if (!empty($_SERVER['QUERY_STRING'])) {
+        $path .= '?' . trim($_SERVER['QUERY_STRING']);
+    }
+
+    return $path;
+}
+
+//Hàm kiểm tra trang hiện tại có phải trang admin hay không
+function isAdmin()
+{
+    if (!empty($_SERVER['PHP_SELF'])) {
+        $currentFile = $_SERVER['PHP_SELF'];
+        $dirFile = dirname($currentFile);
+        $baseNameDir = basename($dirFile);
+        if (trim($baseNameDir) == 'admin') {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+
+
+
+function getOption($key, $type = '')
+{
+    $sql = "SELECT * FROM options WHERE opt_key='$key'";
+    $option = firstRaw($sql);
+    if (!empty($option)) {
+        if ($type == 'label') {
+            return $option['name'];
+        }
+
+        return $option['opt_value'];
+    }
+
+    return false;
+}
+
+/*
+ * getOption('general_hotline', 'label')
+ *
+ * */
+
+/*
+ * getOption('general_hotline', 'label')
+ *
+ * */
+
+function updateOptions($data = [])
+{
+    if (isPost()) {
+        $allFields = getBody();
+
+        if (!empty($data)) {
+            $keyDataArr = array_keys($data);
+            $valueDataArr = array_values($data);
+
+            foreach ($keyDataArr as $key => $value) {
+                $allFields[$value] = $valueDataArr[$key];
+            }
+            print_r1($allFields);
+        }
+
+        $countUpdate = 0;
+        if (!empty($allFields)) {
+            foreach ($allFields as $field => $value) {
+
+                $condition = "opt_key = '$field'";
+                $dataUpdate = [
+                    'opt_value' => trim($value)
+                ];
+                print_r1($dataUpdate);
+                $updateStatus = update('options', $dataUpdate, $condition);
+                if ($updateStatus) {
+                    $countUpdate++;
+                }
+            }
+        }
+
+        if ($countUpdate > 0) {
+            setFlashData('msg', 'Đã cập nhật ' . $countUpdate . ' bản ghi thành công');
+            setFlashData('msg_type', 'success');
+        } else {
+            setFlashData('msg', 'Cập nhật không thành công');
+            setFlashData('msg_type', 'error');
+        }
+
+        redirect(getPathAdmin()); //reload trang
+    }
+}
+
+function getCountContacts()
+{
+    $sql = "SELECT id FROM contacts WHERE status=0";
+    $count = getRows($sql);
+    return $count;
+}
+
+function head()
+{
+?>
+    <link rel="stylesheet" href="<?php echo _WEB_HOST_ROOT; ?>/templates/core/css/style.css" />
+<?php
+}
+
+function foot()
+{
+?>
+    <link rel="stylesheet" href="<?php echo _WEB_HOST_ROOT; ?>/templates/core/css/style.css" />
+    <?php
+}
+
+function renderValue($data = '')
+{
+    echo (!empty($data) ? $data : "");
+}
+
+
+//Lấy link theo module
+function getLinkModule($module, $id, $table = null, $field = null)
+{
+    $prefixUrl = getPrefixLinkService($module);
+
+    if (empty($table)) {
+        $table = $module;
+    }
+
+    if (empty($field)) {
+        $field = 'slug';
+    }
+
+    $sql = "SELECT $field FROM $table WHERE id=$id";
+
+    $moduleDetail = firstRaw($sql);
+
+    if (!empty($moduleDetail)) {
+        $link = _WEB_HOST_ROOT . '/' . $prefixUrl . '/' . $moduleDetail[$field] . '-' . $id . '.html';
+
+        return $link;
+    }
+
+    return false;
+}
+
+//Hàm cắt chữ
+function getLimitText($content, $limit = 20)
+{
+    $content = strip_tags($content);
+    $content = trim($content);
+    $contentArr = explode(' ', $content);
+    $contentArr = array_filter($contentArr);
+    $wordsNumber = count($contentArr); //trả về số lượng phần tử mảng
+    if ($wordsNumber > $limit) {
+        $contentArrLimit = explode(' ', $content, $limit + 1);
+        array_pop($contentArrLimit);
+
+        $limitText = implode(' ', $contentArrLimit) . '...';
+
+        return $limitText;
+    }
+
+    return $content;
+}
+
+function loadError($name = '404')
+{
+    $pathError = _WEB_PATH_ROOT . '/modules/errors/' . $name . '.php';
+    require_once $pathError;
+    die();
+}
+
+function getYoutubeId($url)
+{
+
+    $result = [];
+
+    $urlStr = parse_url($url, PHP_URL_QUERY);
+
+    parse_str($urlStr, $result);
+
+    if (!empty($result['v'])) {
+        return $result['v'];
+    }
+
+    return false;
+}
+
+//Hàm tăng lượt view
+
+function setView($id)
+{
+
+    $blog = firstRaw('SELECT view_count FROM blog WHERE id=' . $id);
+
+    $check = false;
+
+    if (!empty($blog)) {
+        $view = $blog['view_count'];
+        $view++;
+        $check = true;
+    } else {
+        if (is_array($blog)) {
+            $view = 1;
+            $check = true;
+        }
+    }
+
+    if ($check) {
+        update('blog', [
+            'view_count' => $view
+        ], "id=$id");
+    }
+}
+
+//Lấy avatar từ gravatar
+
+function getAvatar($email, $size = null)
+{
+    $hashGravatar = md5($email);
+    if (!empty($size)) {
+        $avatarUrl = 'https://www.gravatar.com/avatar/' . $hashGravatar . '?s=' . $size;
+    } else {
+        $avatarUrl = 'https://www.gravatar.com/avatar/' . $hashGravatar;
+    }
+
+    return $avatarUrl;
+}
+
+//Hàm đệ quy xử lý comment parent
+function getCommentList($commentData, $parentId, $id)
+{
+    if (!empty($commentData)) {
+        echo '<div class="comment-children">';
+        foreach ($commentData as $key => $item) {
+            if ($item['parent_id'] == $parentId) {
+    ?>
+                <div class="comment-list">
+                    <div class="head">
+                        <img src="<?php echo getAvatar($item['email']); ?>" alt="#">
+                    </div>
+                    <div class="body">
+                        <h4><?php echo $item['name']; ?>
+                            <?php if (!empty($item['group_name'])) {
+                                echo '<span class="badge badge-danger">' . $item['group_name'] . '</span>';
+                            } ?>
+                        </h4>
+                        <div class="comment-info">
+                            <p><span><?php echo getDateFormat($item['create_at'], 'd/m/Y'); ?> vào <i class="fa fa-clock-o"></i> <?php echo getDateFormat($item['create_at'], 'H:i'); ?>,</span><a href="<?php echo _WEB_HOST_ROOT . '?module=blog&action=detail&id=' . $id . '&comment_id=' . $item['id']; ?>#comment-form"><i class="fa fa-comment-o"></i>Trả lời</a></p>
+                        </div>
+                        <p><?php echo $item['content']; ?></p>
+                    </div>
+                </div>
+<?php
+                getCommentList($commentData, $item['id'], $id);
+                unset($commentData[$key]);
+            }
+        }
+        echo '</div>';
+    }
+}
+
+
+function getComment($commentId)
+{
+    $commentData = firstRaw("SELECT * FROM comments WHERE id=$commentId");
+    return $commentData;
+}
+
+//Đệ quy lấy tất cả trả lời của 1 comment => gán vào mảng
+function getCommentReply($commentData, $parent_id, &$result = [])
+{
+    if (!empty($commentData)) {
+        foreach ($commentData as $key => $item) {
+            if ($parent_id == $item['parent_id']) {
+                $result[] = $item['id'];
+                getCommentReply($commentData, $item['id'], $result);
+                unset($commentData[$key]);
+            }
+        }
+    }
+
+    return $result;
+}
+
+
+
+//Lấy số lượng comment theo trạng thái
+
+function getCommentCount($status = 0)
+{
+    $sql = "SELECT id FROM comments WHERE status=$status";
+    return getRows($sql);
 }

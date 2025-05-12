@@ -7,8 +7,11 @@ if (!empty($body['id'])){
     if ($portfolioDetailRows>0){
 
         //Thực hiện xoá
+        // Xóa ảnh có id dự án 
+        $conditionImage = "portfolio_id = $portfolioId";
+        $deleteImage = delete('portfolio_images', "$conditionImage");
+        
         $condition = "id=$portfolioId";
-
         $deleteStatus = delete('portfolios', $condition);
         if (!empty($deleteStatus)){
             setFlashData('msg', 'Xoá dự án thành công');

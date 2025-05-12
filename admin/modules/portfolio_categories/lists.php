@@ -19,9 +19,8 @@ $id = 0; //id mặc định
 
 $body = getBody('get');
 
-$keyword = $body['keyword'];
-
-if (!empty($keyword)) {
+if (!empty($body['keyword'])) {
+    $keyword = $body['keyword'];
     $filter = "WHERE name LIKE '%$keyword%'";
 }
 

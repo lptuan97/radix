@@ -25,55 +25,36 @@ $userDetail = getUserInfo($userId);
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-
+                <!--
+                Trang tổng quan - Begin
+                -->
                 <li class="nav-item">
-                    <a href="<?php echo _WEB_HOST_ROOT_ADMIN; ?>" class="nav-link <?php // echo activeMenuSidebar('')?'active':false; 
-                                                                                    ?>">
+                    <a href="<?php echo _WEB_HOST_ROOT_ADMIN; ?>" class="nav-link <?php echo activeMenuSidebar('') ? 'active' : false; ?>">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Tổng quan
                         </p>
                     </a>
                 </li>
+                <!--
+                Trang tổng quan - End
+                -->
 
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-copy"></i>
+                <!--
+                Quản lý dịch vụ - Begin
+                -->
+                <li class="nav-item has-treeview <?php echo activeMenuSidebar('services') ? 'menu-open' : false; ?>">
+                    <a href="#" class="nav-link <?php echo activeMenuSidebar('services') ? 'active' : false; ?>">
+                        <i class="nav-icon fab fa-servicestack"></i>
                         <p>
-                            Blog
+                            Quản lý dịch vụ
                             <i class="fas fa-angle-left right"></i>
 
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Danh sách</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Thêm mới</p>
-                            </a>
-                        </li>
-
-                    </ul>
-                </li>
-                <!-- SERVICES -->
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-copy"></i>
-                        <p>
-                            Services
-                            <i class="fas fa-angle-left right"></i>
-
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=services&action=lists'; ?>" class="nav-link">
+                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=services'; ?>" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Danh sách</p>
                             </a>
@@ -87,44 +68,8 @@ $userDetail = getUserInfo($userId);
 
                     </ul>
                 </li>
-
                 <!--
-                Quản lý dự án - Begin
-                -->
-                <li class="nav-item has-treeview <?php echo activeMenuSidebar('portfolios') || activeMenuSidebar('portfolio_categories') ? 'menu-open' : false; ?>">
-                    <a href="#" class="nav-link <?php echo activeMenuSidebar('portfolios') || activeMenuSidebar('portfolio_categories') ? 'active' : false; ?>">
-                        <i class="nav-icon fas fa-file"></i>
-                        <p>
-                            Quản lý dự án
-                            <i class="fas fa-angle-left right"></i>
-
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=portfolios'; ?>" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Danh sách dự án</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=portfolios&action=add'; ?>" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Thêm dự án mới</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=portfolio_categories'; ?>" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Danh mục dự án</p>
-                            </a>
-                        </li>
-
-                    </ul>
-                </li>
-                <!--
-                Quản lý dự án - End
+                Quản lý dịch vụ - End
                 -->
 
                 <!--
@@ -159,19 +104,101 @@ $userDetail = getUserInfo($userId);
                 Quản lý trang - End
                 -->
 
-                <!-- GROUPS -->
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-copy"></i>
+                <!--
+                Quản lý dự án - Begin
+                -->
+                <li class="nav-item has-treeview <?php echo activeMenuSidebar('portfolios') || activeMenuSidebar('portfolio_categories') ? 'menu-open' : false; ?>">
+                    <a href="#" class="nav-link <?php echo activeMenuSidebar('portfolios') || activeMenuSidebar('portfolio_categories') ? 'active' : false; ?>">
+                        <i class="nav-icon fas fa-project-diagram"></i>
                         <p>
-                            Groups
+                            Quản lý dự án
                             <i class="fas fa-angle-left right"></i>
 
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=groups&action=lists'; ?>" class="nav-link">
+                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=portfolios'; ?>" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách dự án</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=portfolios&action=add'; ?>" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thêm dự án mới</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=portfolio_categories'; ?>" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh mục dự án</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                <!--
+                Quản lý dự án - End
+                -->
+
+                <!--
+                Quản lý blog - Begin
+                -->
+                <li class="nav-item has-treeview <?php echo activeMenuSidebar('blog') || activeMenuSidebar('blog_categories') ? 'menu-open' : false; ?>">
+                    <a href="#" class="nav-link <?php echo activeMenuSidebar('blog') || activeMenuSidebar('blog_categories') ? 'active' : false; ?>">
+                        <i class="nav-icon fas fa-address-card"></i>
+                        <p>
+                            Quản lý Blog
+                            <i class="fas fa-angle-left right"></i>
+
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=blog'; ?>" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách Blog</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=blog&action=add'; ?>" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thêm blog mới</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=blog_categories'; ?>" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh mục blog</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                <!--
+                Quản lý blog - End
+                -->
+
+
+                <!--
+                Nhóm người dùng - Begin
+                -->
+
+                <li class="nav-item has-treeview <?php echo activeMenuSidebar('groups') ? 'menu-open' : false; ?>">
+                    <a href="#" class="nav-link <?php echo activeMenuSidebar('groups') ? 'active' : false; ?>">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>
+                            Nhóm người dùng
+                            <i class="fas fa-angle-left right"></i>
+
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=groups'; ?>" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Danh sách</p>
                             </a>
@@ -185,15 +212,17 @@ $userDetail = getUserInfo($userId);
 
                     </ul>
                 </li>
-
-                <!-- USER -->
-                <li class="nav-item has-treeview <?php // echo activeMenuSidebar('blog')?'menu-open':false; 
-                                                    ?>">
-                    <a href="#" class="nav-link <?php // echo activeMenuSidebar('blog')?'active':false; 
-                                                ?>">
-                        <i class="nav-icon fas fa-copy"></i>
+                <!--
+                    Nhóm người dùng - End
+                -->
+                <!--
+                Quản lý người dùng - Begin
+                -->
+                <li class="nav-item has-treeview <?php echo activeMenuSidebar('users') ? 'menu-open' : false; ?>">
+                    <a href="#" class="nav-link <?php echo activeMenuSidebar('users') ? 'active' : false; ?>">
+                        <i class="nav-icon fas fa-user"></i>
                         <p>
-                            Users
+                            Quản lý người dùng
                             <i class="fas fa-angle-left right"></i>
 
                         </p>
@@ -206,7 +235,7 @@ $userDetail = getUserInfo($userId);
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=blog&action=add'; ?>" class="nav-link">
+                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=users&action=add'; ?>" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Thêm mới</p>
                             </a>
@@ -214,7 +243,134 @@ $userDetail = getUserInfo($userId);
 
                     </ul>
                 </li>
+                <!--
+                Quản lý người dùng - End
+                -->
+                <!--
+                Quản lý liên hệ - Begin
+                -->
+                <li class="nav-item has-treeview <?php echo activeMenuSidebar('contacts') || activeMenuSidebar('contact_type') ? 'menu-open' : false; ?>">
+                    <a href="#" class="nav-link <?php echo activeMenuSidebar('contacts') || activeMenuSidebar('contact_type') ? 'active' : false; ?>">
+                        <i class="nav-icon far fa-id-card"></i>
+                        <p>
+                            Quản lý liên hệ <span class="badge badge-danger"><?php echo getCountContacts(); ?></span>
+                            <i class="fas fa-angle-left right"></i>
 
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=contacts'; ?>" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách <span class="badge badge-danger"><?php echo getCountContacts(); ?></span></p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=contact_type'; ?>" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Quản lý phòng ban</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                <!--
+                Quản lý liên hệ - End
+                -->
+                <!--
+                Quản lý bình luận - Begin
+                -->
+                <li class="nav-item">
+                    <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=comments'; ?>" class="nav-link <?php echo activeMenuSidebar('comments') ? 'active' : false; ?>">
+                        <i class="nav-icon fas fa-comment-dots"></i>
+                        <p>
+                            Quản lý bình luận <span class="badge badge-danger"><?php echo getCommentCount(); ?></span>
+                        </p>
+                    </a>
+                </li>
+                <!--
+                Quản lý bình luận - End
+                -->
+                <!--    
+                Cấu hình website - Begin
+                -->
+                <li class="nav-item has-treeview <?php echo activeMenuSidebar('options') ? 'menu-open' : false; ?>">
+                    <a href="#" class="nav-link <?php echo activeMenuSidebar('options') ? 'active' : false; ?>">
+                        <i class="nav-icon fas fa-cog"></i>
+                        <p>
+                            Thiết lập
+                            <i class="fas fa-angle-left right"></i>
+
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=options&action=general'; ?>" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thiết lập chung</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=options&action=header'; ?>" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thiết lập Header</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=options&action=footer'; ?>" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thiết lập Footer</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=options&action=home'; ?>" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thiết lập trang chủ</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=options&action=about'; ?>" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thiết lập giới thiệu</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=options&action=team'; ?>" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thiết lập Team</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=options&action=services'; ?>" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thiết lập dịch vụ</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=options&action=portfolios'; ?>" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thiết lập dự án</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="<?php echo _WEB_HOST_ROOT_ADMIN . '?module=options&action=blog'; ?>" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thiết lập blog</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                <!--
+                Cấu hình website - End
+                -->
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

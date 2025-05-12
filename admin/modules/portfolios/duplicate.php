@@ -4,6 +4,7 @@ $body = getBody();
 if (!empty($body['id'])){
     $portfolioId = $body['id'];
     $portfolioDetail = firstRaw("SELECT * FROM portfolios WHERE id=$portfolioId");
+    
     if (!empty($portfolioDetail)){
 
         //Loại bỏ thời gian tạo (create_at), thời gian cập nhật (update_at), id

@@ -3,25 +3,25 @@ session_start();
 ob_start();
 require_once '../config.php';
 
-echo "<div class ='text-primary container d-flex justify-content-end'>";
+// echo "<div class ='text-primary container d-flex justify-content-end'>";
 
-echo "all-session: '";
-echo '<pre>';
-print_r($_SESSION);
-echo '</pre>';
+// echo "all-session: '";
+// echo '<pre>';
+// print_r($_SESSION);
+// echo '</pre>';
 
-echo "all-get: '";
-echo '<pre>';
-print_r($_GET);
-echo '</pre>';
+// echo "all-get: '";
+// echo '<pre>';
+// print_r($_GET);
+// echo '</pre>';
 
-echo "all-post: ";
-echo '<pre>';
-print_r($_POST);
-echo '</pre>';
-echo '<br/>';
+// echo "all-post: ";
+// echo '<pre>';
+// print_r($_POST);
+// echo '</pre>';
+// echo '<br/>';
 
-echo "</div>";
+// echo "</div>";
 
 
 //Import phpmailer lib
@@ -36,8 +36,27 @@ require_once '../includes/connect.php';
 require_once '../includes/database.php';
 require_once '../includes/session.php';
 
+ini_set('display_errors', 0);
+error_reporting(0);
+
+
 $module = _MODULE_DEFAULT_ADMIN;
 $action = _ACTION_DEFAULT;
+$debugStatus = _DEBUG;
+
+// if (!getSession('reload')){
+//     removeSession('debug_error');
+// }
+set_exception_handler("setExceptionError");
+
+set_error_handler('setErrorHandler');
+
+loadExceptionError();
+// removeSession('debug_error');
+
+
+
+
 
 if (!empty($_GET['module'])){
     if (is_string($_GET['module'])){

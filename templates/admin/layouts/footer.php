@@ -49,6 +49,7 @@
 <script src="<?php echo _WEB_HOST_ADMIN_TEMPLATE; ?>/assets/js/pages/dashboard.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<?php echo _WEB_HOST_ADMIN_TEMPLATE; ?>/assets/js/demo.js"></script>
+<script src="<?php echo _WEB_HOST_ADMIN_TEMPLATE; ?>/assets/plugins/ion-rangeslider/js/ion.rangeSlider.min.js"></script>
 <!-- ckeditor -->
 <script src="<?php echo _WEB_HOST_ADMIN_TEMPLATE; ?>/assets/ckeditor/ckeditor.js"></script>
 <!-- ckeditor -->
@@ -69,6 +70,8 @@ if (!empty($body['module'])) {
     let prefixUrl = '<?php echo getPrefixLinkService($module); ?>';
 </script>
 <script src="<?php echo _WEB_HOST_ADMIN_TEMPLATE; ?>/assets/js/custom.js?ver=<?php echo rand(); ?>"></script>
+<script src="<?php echo _WEB_HOST_ADMIN_TEMPLATE; ?>/assets/js/ck.js?ver=<?php echo rand(); ?>"></script>
+
 </body>
 
 </html>

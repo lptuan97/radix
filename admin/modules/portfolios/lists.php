@@ -12,10 +12,12 @@ layout('header', 'admin', $data);
 layout('sidebar', 'admin', $data);
 layout('breadcrumb', 'admin', $data);
 
-$PortfolioId = isLogin()['Portfolio_id']; //Lấy PortfolioId đang đăng nhập
+// $PortfolioId = isLogin()['Portfolio_id']; //Lấy PortfolioId đang đăng nhập
+$PortfolioId = '';
 
 //Xử lý lọc dữ liệu
 $filter = '';
+
 if (isGet()){
     $body = getBody();
 

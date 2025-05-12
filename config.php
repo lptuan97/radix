@@ -14,25 +14,28 @@ const _INCODE = true; //Ngăn chặn hành vi truy cập trực tiếp vào file
 
 //Thiết lập host
 
-define('_WEB_HOST_ROOT', 'http://' . $_SERVER['HTTP_HOST'] . '/radix'); //Địa chỉ trang chủ
+define('_WEB_HOST_ROOT', 'http://' . $_SERVER['HTTP_HOST'] . '/radix'); // -> http://localhost/radix
 
-define('_WEB_HOST_TEMPLATE', _WEB_HOST_ROOT . '/templates/client');
+define('_WEB_HOST_TEMPLATE', _WEB_HOST_ROOT . '/templates/client'); // -> http://localhost/radix/templates/client
 
 define('_WEB_HOST_ROOT_ADMIN', _WEB_HOST_ROOT . '/admin');
 
 define('_WEB_HOST_ADMIN_TEMPLATE', _WEB_HOST_ROOT . '/templates/admin');
 
 //Thiết lập path
-define('_WEB_PATH_ROOT', __DIR__);
-define('_WEB_PATH_TEMPLATE', _WEB_PATH_ROOT . '/templates');
+define('_WEB_PATH_ROOT', __DIR__); // -> C:\xampp\htdocs\radix
+define('_WEB_PATH_TEMPLATE', _WEB_PATH_ROOT . '\templates'); //-> C:\xampp\htdocs\radix/templates
 
 //Thiết lập kết nối database
 
 const _HOST = 'localhost';
 const _USER = 'root';
 const _PASS = ''; //Xampp => pass='';
-const _DB = 'phponline_radix';
+const _DB = 'phponline_radix_v2';
 const _DRIVER = 'mysql';
+
+//Thiết lập debug
+const _DEBUG = false;
 
 //Thiết lập số lượng bản ghi hiển thị trên 1 trang
 const _PER_PAGE = 10;
