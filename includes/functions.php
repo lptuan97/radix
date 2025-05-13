@@ -837,3 +837,12 @@ function getCommentCount($status = 0)
     $sql = "SELECT id FROM comments WHERE status=$status";
     return getRows($sql);
 }
+
+
+
+//Lấy thông tin của phòng ban
+function getContactType($typeId)
+{
+    $sql = "SELECT * FROM contact_type WHERE id=$typeId";
+    return firstRaw($sql);
+}
