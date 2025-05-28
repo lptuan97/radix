@@ -129,6 +129,12 @@ function toSlug(title) {
 
     return slug;
 }
+// let linkId = document.querySelector('.link-id');
+
+//Lấy id từ url
+let fullUrl = window.location.href;
+let searchParams = new URLSearchParams(fullUrl);
+let id = searchParams.get('id');
 
 let sourceTitle = document.querySelector('.slug');
 let slugRender = document.querySelector('.render-slug');
@@ -139,10 +145,14 @@ if (renderLink !== null) {
     //Lấy slug
     let slug = '';
     if (slugRender !== null) {
-        slug = '/' + slugRender.value.trim();
+        slug = '/' + prefixUrl + '/' + slugRender.value.trim() + '-' + id + '.html';
     }
 
-    renderLink.querySelector('span').innerHTML = `<a href="${rootUrl + slug}" target="_blank">${rootUrl + slug}</a>`;
+    if (id !== null) {
+        renderLink.querySelector('span').innerHTML = `<a href="${rootUrl + slug}" target="_blank">${rootUrl + slug}</a>`;
+    } else {
+        renderLink.querySelector('span').innerHTML = 'Vui lòng cập nhật để hiển thị link';
+    }
 }
 if (sourceTitle !== null && slugRender !== null) {
     sourceTitle.addEventListener('keyup', (e) => {
@@ -162,10 +172,13 @@ if (sourceTitle !== null && slugRender !== null) {
     sourceTitle.addEventListener('change', () => {
         sessionStorage.setItem('save_slug', 1);
 
-        let currentLink = rootUrl + '/' + prefixUrl + '/' + slugRender.value.trim() + '.html';
+        if (id !== null) {
+            let currentLink = rootUrl + '/' + prefixUrl + '/' + slugRender.value.trim() + '-' + id + '.html';
 
-        renderLink.querySelector('span a').innerHTML = currentLink;
-        renderLink.querySelector('span a').href = currentLink;
+            renderLink.querySelector('span a').innerHTML = currentLink;
+            renderLink.querySelector('span a').href = currentLink;
+        }
+
     });
 
     slugRender.addEventListener('change', (e) => {
@@ -176,10 +189,13 @@ if (sourceTitle !== null && slugRender !== null) {
             e.target.value = slug;
         }
 
-        let currentLink = rootUrl + '/' + prefixUrl + '/' + slugRender.value.trim() + '.html';
+        if (id !== null) {
+            let currentLink = rootUrl + '/' + prefixUrl + '/' + slugRender.value.trim() + '-' + id + '.html';
 
-        renderLink.querySelector('span a').innerHTML = currentLink;
-        renderLink.querySelector('span a').href = currentLink;
+            renderLink.querySelector('span a').innerHTML = currentLink;
+            renderLink.querySelector('span a').href = currentLink;
+        }
+
     });
 
     if (slugRender.value.trim() == '') {
@@ -572,3 +588,46 @@ if (addTeamObject !== null && teamWrapperObject !== null) {
     });
 
 }
+
+
+//Menu editor custom
+
+// icon picker options
+//var iconPickerOptions = {searchText: "Buscar...", labelHeader: "{0}/{1}"};
+// sortable list options
+var sortableListOptions = {
+    placeholderCss: { 'background-color': "#cccccc" }
+};
+var editor = new MenuEditor('myEditor',
+    {
+        listOptions: sortableListOptions,
+        maxLevel: 2 // (Optional) Default is -1 (no level limit)
+        // Valid levels are from [0, 1, 2, 3,...N]
+    });
+editor.setForm($('#frmEdit'));
+editor.setUpdateButton($('#btnUpdate'));
+//Calling the update method
+$("#btnUpdate").click(function () {
+    editor.update();
+});
+// Calling the add method
+$('#btnAdd').click(function () {
+    editor.add();
+});
+
+
+// var arrayJson = [{"href":"http://home.com","icon":"fas fa-home","text":"Home", "target": "_top", "title": "My Home"},{"icon":"fas fa-chart-bar","text":"Opcion2"},{"icon":"fas fa-bell","text":"Opcion3"},{"icon":"fas fa-crop","text":"Opcion4"},{"icon":"fas fa-flask","text":"Opcion5"},{"icon":"fas fa-map-marker","text":"Opcion6"},{"icon":"fas fa-search","text":"Opcion7","children":[{"icon":"fas fa-plug","text":"Opcion7-1","children":[{"icon":"fas fa-filter","text":"Opcion7-1-1"}]}]}];
+
+editor.setData(arrayJson);
+
+if ($('.save-menu').length > 0) {
+    $('.save-menu').on('click', function (e) {
+        e.preventDefault(); //vô hiệu hoá submit form
+        var str = editor.getString();
+        $('#menu-content').val(str);
+
+        $('#frmEdit').submit();
+    });
+}
+
+

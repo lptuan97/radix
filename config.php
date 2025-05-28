@@ -33,6 +33,7 @@ const _USER = 'root';
 const _PASS = ''; //Xampp => pass='';
 const _DB = 'phponline_radix_v2';
 const _DRIVER = 'mysql';
+const _PORT = 3307;
 
 //Thiết lập debug
 const _DEBUG = false;

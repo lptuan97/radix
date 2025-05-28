@@ -54,7 +54,12 @@
 <script src="<?php echo _WEB_HOST_ADMIN_TEMPLATE; ?>/assets/ckeditor/ckeditor.js"></script>
 <!-- ckeditor -->
 <script src="<?php echo _WEB_HOST_ADMIN_TEMPLATE; ?>/assets/ckfinder/ckfinder.js"></script>
+<!-- menu -->
+<script src="<?php echo _WEB_HOST_ADMIN_TEMPLATE; ?>/assets/js/demo.js"></script>
 
+<script src="<?php echo _WEB_HOST_ADMIN_TEMPLATE; ?>/assets/js/bootstrap-iconpicker.min.js"></script>
+
+<script src="<?php echo _WEB_HOST_ADMIN_TEMPLATE; ?>/assets/js/jquery-menu-editor.min.js"></script>
 
 <!-- slug -->
 <?php

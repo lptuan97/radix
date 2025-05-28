@@ -1,5 +1,11 @@
 <?php
 if (!defined('_INCODE')) die('Access Deined...');
+$menuDataArr = [];
+$menuJson = html_entity_decode(getOption('menu'));
+if (!empty($menuJson)) {
+	$menuDataArr = json_decode($menuJson, true);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -124,11 +130,11 @@ if (!defined('_INCODE')) die('Access Deined...');
 						<!-- Logo -->
 						<div class="logo">
 							<a href="<?php echo _WEB_HOST_ROOT; ?>">
-							<?php if (!empty($logo)): ?>
-								<img src="<?php echo $logo; ?>" alt="logo">
-							<?php else: ?>
-								<h1 style="margin-top: 10px;"><?php echo getOption('general_sitename'); ?></h1>
-							<?php endif; ?>
+								<?php if (!empty($logo)): ?>
+									<img src="<?php echo $logo; ?>" alt="logo">
+								<?php else: ?>
+									<h1 style="margin-top: 10px;"><?php echo getOption('general_sitename'); ?></h1>
+								<?php endif; ?>
 							</a>
 						</div>
 						<div class="link"><a href="<?php echo _WEB_HOST_ROOT; ?>"><span>R</span>adix</a></div>
@@ -140,25 +146,28 @@ if (!defined('_INCODE')) die('Access Deined...');
 						<!-- Main Menu -->
 						<div class="mainmenu">
 							<nav class="navigation">
-								<ul class="nav menu">
-									<li class="active"><a href="index.html">Home</a></li>
-									<li><a href="#">Pages<i class="fa fa-caret-down"></i></a>
-										<ul class="dropdown">
-											<li><a href="?module=page-template&action=about">About Us</a></li>
-											<li><a href="team.html">Our Team</a></li>
-											<li><a href="pricing.html">Pricing</a></li>
-										</ul>
-									</li>
-									<li><a href="services.html">Services</a></li>
-									<li><a href="portfolio.html">Portfolio</a></li>
-									<li><a href="#">Blogs<i class="fa fa-caret-down"></i></a>
-										<ul class="dropdown">
-											<li><a href="blog.html">Blog layout</a></li>
-											<li><a href="blog-single.html">Blog Single</a></li>
-										</ul>
-									</li>
-									<li><a href="contact.html">Contact</a></li>
-								</ul>
+								<?php
+								getMenu($menuDataArr);
+								?>
+								<!--                            <ul class="nav menu">-->
+								<!--                                <li class="active"><a href="index.html">Home</a></li>-->
+								<!--                                <li><a href="#">Pages<i class="fa fa-caret-down"></i></a>-->
+								<!--                                    <ul class="dropdown">-->
+								<!--                                        <li><a href="about-us.html">About Us</a></li>-->
+								<!--                                        <li><a href="team.html">Our Team</a></li>-->
+								<!--                                        <li><a href="pricing.html">Pricing</a></li>-->
+								<!--                                    </ul>-->
+								<!--                                </li>-->
+								<!--                                <li><a href="services.html">Services</a></li>-->
+								<!--                                <li><a href="portfolio.html">Portfolio</a></li>-->
+								<!--                                <li><a href="#">Blogs<i class="fa fa-caret-down"></i></a>-->
+								<!--                                    <ul class="dropdown">-->
+								<!--                                        <li><a href="blog.html">Blog layout</a></li>-->
+								<!--                                        <li><a href="blog-single.html">Blog Single</a></li>-->
+								<!--                                    </ul>-->
+								<!--                                </li>-->
+								<!--                                <li><a href="contact.html">Contact</a></li>-->
+								<!--                            </ul>-->
 							</nav>
 							<!-- Button -->
 							<div class="button">

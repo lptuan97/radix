@@ -4,7 +4,7 @@ if (!defined('_INCODE')) die('Access Deined...');
 try{
     if (class_exists('PDO')){
 
-        $dsn = _DRIVER.':dbname='._DB.';host='._HOST;
+        $dsn = _DRIVER.':dbname='._DB.';host='._HOST.';port='._PORT ;
 
         $options = [
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',

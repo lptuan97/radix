@@ -1,7 +1,7 @@
 // CKEDITOR.replace("id_textarea");
 
 let editors = document.getElementsByClassName('editor');
-console.log(editors);
+// console.log(editors);
 
 for (let i = 0; i < editors.length; i++) {
 	idCkeditor = 'editor_'+ (i);

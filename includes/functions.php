@@ -105,9 +105,11 @@ function getBody($method = '')
                 foreach ($_GET as $key => $value) {
                     $key = strip_tags($key);
                     if (is_array($value)) {
-                        $bodyArr[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
+                        //$bodyArr[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
+                        $bodyArr[$key] = filter_var($_GET[$key], FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
                     } else {
-                        $bodyArr[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+                        //$bodyArr[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+                        $bodyArr[$key] = filter_var($_GET[$key], FILTER_SANITIZE_SPECIAL_CHARS);
                     }
                 }
             }
@@ -131,9 +133,11 @@ function getBody($method = '')
                 foreach ($_GET as $key => $value) {
                     $key = strip_tags($key);
                     if (is_array($value)) {
-                        $bodyArr[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
+                        //$bodyArr[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
+                        $bodyArr[$key] = filter_var($_GET[$key], FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
                     } else {
-                        $bodyArr[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+                        $bodyArr[$key] = filter_var($_GET[$key], FILTER_SANITIZE_SPECIAL_CHARS);
+                        //$bodyArr[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
                     }
                 }
             }
@@ -663,30 +667,30 @@ function renderValue($data = '')
 
 
 //Lấy link theo module
-function getLinkModule($module, $id, $table = null, $field = null)
-{
-    $prefixUrl = getPrefixLinkService($module);
+// function getLinkModule($module, $id, $table = null, $field = null)
+// {
+//     $prefixUrl = getPrefixLinkService($module);
 
-    if (empty($table)) {
-        $table = $module;
-    }
+//     if (empty($table)) {
+//         $table = $module;
+//     }
 
-    if (empty($field)) {
-        $field = 'slug';
-    }
+//     if (empty($field)) {
+//         $field = 'slug';
+//     }
 
-    $sql = "SELECT $field FROM $table WHERE id=$id";
+//     $sql = "SELECT $field FROM $table WHERE id=$id";
 
-    $moduleDetail = firstRaw($sql);
+//     $moduleDetail = firstRaw($sql);
 
-    if (!empty($moduleDetail)) {
-        $link = _WEB_HOST_ROOT . '/' . $prefixUrl . '/' . $moduleDetail[$field] . '-' . $id . '.html';
+//     if (!empty($moduleDetail)) {
+//         $link = _WEB_HOST_ROOT . '/' . $prefixUrl . '/' . $moduleDetail[$field] . '-' . $id . '.html';
 
-        return $link;
-    }
+//         return $link;
+//     }
 
-    return false;
-}
+//     return false;
+// }
 
 //Hàm cắt chữ
 function getLimitText($content, $limit = 20)
@@ -845,4 +849,30 @@ function getContactType($typeId)
 {
     $sql = "SELECT * FROM contact_type WHERE id=$typeId";
     return firstRaw($sql);
+}
+
+//Đổ dữ liệu menu
+function getMenu($dataMenu, $isSub = false)
+{
+    if (!empty($dataMenu)) {
+
+        echo ($isSub) ? '<ul class="dropdown">' : '<ul class="nav menu">';
+
+        foreach ($dataMenu as $key => $item) {
+            echo '<li><a href="' . $item['href'] . '" target="' . $item['target'] . '" title="' . $item['title'] . '">' . $item['text'] . '</a>';
+
+            //Gọi đệ quy
+            if (!empty($item['children'])) {
+                getMenu($item['children'], true);
+            }
+
+            echo '</li>';
+        }
+
+        echo '</ul>';
+    }
+}
+// Tạo ra một chuỗi id random cho blog hoặc page
+function createRandom_id($module = ''){
+   return uniqid($module,false);
 }
